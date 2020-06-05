@@ -1,2 +1,4 @@
 .ipynb_checkpoints/
 .gitignore/
+docs/
+MNIST_data/
