@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <title>Voice Magic Conference Report</title>
+
+    <style>
+        /* stype code */
+    </style>
+
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body id="app">
+<div class="jumbotron jumbotron-fluid">
+    <div class="container container-fluid">
+        <h1>Voice Magic 회의록</h1><br>
+        <div class="row">
+            <div class="col-md-3">
+                <span class="input-group-btn">
+                    <input type="file" id="input-file" class="form-control btn btn-info">
+                </span>
+            </div>
+            <div class="col-md-1">
+                <select class="form-control btn btn-default" id="encoder">
+                    <option>FLAC</option>
+                    <option>LINEAR16</option>
+                    <option>MULAW</option>
+                    <option>AMR</option>
+                    <option>AMR_WB</option>
+                    <option>OGG_OPUS</option>
+                    <option>AMR_SPEEX</option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <select class="form-control btn btn-default" id="sample-rate">
+                    <option>8,000Khz</option>
+                    <option>16,000Khz</option>
+                    <option>44,100Khz</option>
+                    <option>48,000Khz</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button id="report-btn" type="button" class="btn btn-primary">Report</button>
+                <button id="save-btn" type="button" class="btn btn-success">Save</button>
+                <button id="edit-btn" type="button" class="btn btn-warning">Edit</button>
+                <button id="reset-btn" type="button" class="btn btn-danger">Reset</button>            
+            </div>
+            <div class="col-md-1">
+                <button id="takeview-btn" type="button" class="btn btn-info">TakeView</button>            
+            </div>
+            <div class="col-md-3">
+                <button id="word-map" type="button" class="btn btn-info">Map</button>            
+                <button id="word-tree" type="button" class="btn btn-info">Tree</button>            
+                <button id="word-topic" type="button" class="btn btn-info">Topic</button>  
+                <button id="word-cloud" type="button" class="btn btn-info">Cloud</button>            
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container container-fluid">
+    <table class="table table-bordered table-responsive">
+        <tr class="active">
+            <td id="table-th1-td1" class="text-center"><h4>회의 제목</h4></td>
+            <td id="table-th1-td2" class="text-center"><h4>회의 일시</h4></td>
+            <td id="table-th1-td2" class="text-center"><h4>회의 참석자</h4></td>
+        </tr>
+        <tr>
+            <td id="table-tr1-td1" class="text-center"><br><br></td>
+            <td id="table-tr1-td2" class="text-center"><br><br></td>
+            <td id="table-tr1-td3" class="text-center"><br><br></td>
+        </tr>
+        <tr class="active">
+            <td id="table-th2-td1" class="text-center"><h4>회의 안건</h4></td>
+            <td id="table-th2-td2" class="text-center"><h4>작성자</h4></td>
+            <td id="table-th2-td3" class="text-center"><h4>소속</h4></td>
+            </tr>
+        <tr>
+            <td id="table-tr2-td1" class="text-center"><br><br></td>
+            <td id="table-tr2-td2" class="text-center"><br><br></td>
+            <td id="table-tr2-td3" class="text-center"><br><br></td>
+        </tr>
+        <tr class="active">
+            <td colspan="3" id="table-th3-td1" class="text-center"><h4>회의 내용</h4></td>
+        </tr>
+        <tr>
+            <td colspan="3" id="table-td3-td1">
+                <ul>
+                    <li id="table-td3-td1-li1"><br><br></li>
+                    <li id="table-td3-td1-li2"><br><br></li>
+                    <li id="table-td3-td1-li3"><br><br></li>
+                    <li id="table-td3-td1-li4"><br><br></li>
+                    <li id="table-td3-td1-li5"><br><br></li>
+                </ul>
+            </td>
+        </tr>
+        <tr class="active">
+            <td colspan="3" id="table-th4-td1" class="text-center"><h4>Action Items</h4></td>
+        </tr>
+        <tr>
+            <td colspan="3" id="table-td4-td1">
+                <ul>
+                    <li id="table-td4-td1-li1"><br><br></li>
+                    <li id="table-td4-td1-li2"><br><br></li>
+                    <li id="table-td4-td1-li3"><br><br></li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/underscore.js/1.8.3/underscore-min.js"></script>
+
+<!-- 버튼에 대한 Javascript Function 수정 필요 -->
+<script>
+    function openTextFile() {
+        var input = document.createElement("input");
+        input.type = "file";
+        input.accept = "text/plain";
+        input.onchange = function (event) {
+            processFile(event.target.files[0]);
+        };
+        input.click();
+    }
+    
+    function processFile(file) {
+        // alert(files[0]);
+        reader.onload = function () {
+            // 
+        };
+        reader.readAsText(files[0]);
+    }
+
+    function readTextFile(file) {
+        $.get(file, function(data) {
+            var lines = data.split("\n");
+            var sentences = new Array();
+            var sent_length = 100;
+            $.each(lines, function(n, elem) {
+                if (elem.length > sent_length && elem.charAt(elem.length-1) != "?") {
+                    sentences.push(elem);
+                }
+            })
+
+            setTimeout(
+                function() { $('#table-td3-td1-li1').html(sentences[0] + "<br><br>"); }, 500);
+            setTimeout(
+                function() { $('#table-td3-td1-li2').html(sentences[1] + "<br><br>"); }, 1000);
+            setTimeout(
+                function() { $('#table-td3-td1-li3').html(sentences[2] + "<br><br>"); }, 1500);
+            setTimeout(
+                function() { $('#table-td3-td1-li4').html(sentences[3] + "<br><br>"); }, 2000);
+            setTimeout(
+                function() { $('#table-td3-td1-li5').html(sentences[4] + "<br><br>"); }, 2500);
+
+        });
+    }
+
+    function resetFunction() {
+        $('#table-td3-td1').html(`
+            <ul>
+                <li id="table-td3-td1-li1"><br><br></li>
+                <li id="table-td3-td1-li2"><br><br></li>
+                <li id="table-td3-td1-li3"><br><br></li>
+                <li id="table-td3-td1-li4"><br><br></li>
+                <li id="table-td3-td1-li5"><br><br></li>
+            </ul>`
+        );
+
+        $('#table-td4-td1').html(`
+            <ul>
+                <li id="table-td4-td1-li1"><br><br></li>
+                <li id="table-td4-td1-li2"><br><br></li>
+                <li id="table-td4-td1-li3"><br><br></li>
+            </ul>`
+        );
+    }
+
+    function reportFunction() {
+        resetFunction()
+
+        // [work-to-do]: 일정표에서 회의 정보를 가져오도록 개발 필요
+        var conf_title = "Voice Magic 서비스 개발 회의";
+        var conf_date = "2019. 06. 28";
+        var conf_attendants = "지계광, 박형일, 윤기영, 이성식, 권도연, 채수삼";
+        var conf_agenda = `
+            비즈니스 모델 Lean Canvas 보완<br>
+            비즈니스 모델 전환(Pivoting) 방향<br>
+            솔루션 개발 방안`;
+        var conf_author = "권도연";
+        var conf_org = "KAIT AI BM 전문가 과정";
+
+        $('#table-tr1-td1').html(conf_title);
+        $('#table-tr1-td2').html(conf_date);
+        $('#table-tr1-td3').html(conf_attendants);
+        $('#table-tr2-td1').html(conf_agenda);
+        $('#table-tr2-td2').html(conf_author);
+        $('#table-tr2-td3').html(conf_org);
+
+        // STT로 변환된 Transcript를 전달
+        readTextFile("/static/19m_20181220_deominju_16000.txt")
+
+        setTimeout(
+            function() 
+            {
+                $('#table-td4-td1').html(`
+                    <ul>
+                        <li id="table-td4-td1-li1">action item 1<br><br></li>
+                        <li id="table-td4-td1-li2">action item 2<br><br></li>
+                        <li id="table-td4-td1-li3">action item 3<br><br></li>
+                    </ul>`
+                );
+            }, 3000);
+    }
+
+    function initFunction() {
+        $('#report-btn').click(function () {
+            reportFunction()
+        });
+
+        $('#edit-btn').click(function () {
+            alert("회의록 내용을 편집 합니다.(기능구현 예정)")
+        });
+
+        $('#save-btn').click(function () {
+            alert("회의록을 저장 하였습니다.");
+        });
+
+        $('#reset-btn').click(function () {
+            resetFunction()
+        });
+
+        $('#takeview-btn').click(function () {
+            var url = "http://takeview.co.kr/search/documentaion_collect_external/";
+            var name = "take view";
+            var option = "width = 600, height = 550, top = 200, left = 200, location = no"
+            window.open(url, name, option);
+        });
+
+        $('#word-map').click(function () {
+            $('#table-td3-td1').html(`
+                <p align="middle">
+                    <iframe height="480" width="640" frameborder="0" 
+                        src="http://view.takeview.co.kr/ko-KR/embed?s=%2FservicesNS%2Fnobody%2FTakeview_Service%2Fsaved%2Fsearches%2Fwordmapexample&oid=G0RK3Sdk8lvrLk5525iXt%5EhQcFbOeZVKeph5_M6RFDRhA6vzdD_mPnOUb87YBRNA_IJaLY3W3zaZACLONWEUDNkeZlE4YUsbn5%5EPLKuKGPA78HqbHyv9mrkNseNCbfjiASojyf3JyY2tFZLVVaQ4TF0P7oU2W8kTjkx">
+                    </iframe>
+                </p>`);
+        });
+
+        $('#word-tree').click(function () {
+            $('#table-td3-td1').html(`
+                <p align="middle">
+                    <iframe height="480" width="640" frameborder="0" 
+                        src="http://view.takeview.co.kr/ko-KR/embed?s=%2FservicesNS%2Fnobody%2FTakeview_Service%2Fsaved%2Fsearches%2Fwordtreeexample&oid=wMsOs6vnzZtnTMnxC6dUC1As1%5EJEpavB44qm5tdcfM5N_dF_IIRUTcZ0EjhTPakBTK5d7I4E2hXMS4iacuzYDYXLlJwcgVYos%5EWcqVh3zHkHzgke%5EUrlFujyKfzuRAgK7z_K%5EMswwoOE0mAuZGIt353RF0a">
+                    </iframe>
+                </p>`);
+        });
+
+        $('#word-topic').click(function () {
+            $('#table-td3-td1').html(`
+                <p align="middle">
+                    <iframe height="480" width="640" frameborder="0" 
+                        src="http://view.takeview.co.kr/ko-KR/embed?s=%2FservicesNS%2Fnobody%2FTakeview_Service%2Fsaved%2Fsearches%2Fwordtopicexample&oid=UgKNuiNDCEDhVCtHrcHUPztWdzQF4FJ2zRuu11X4ucz3g0pfPtaXCLrU3DvP_5MNLA28m5GSnlOMloGhgjoqUfrmEsN_ivrC5RiQfWi87PpNKEUS6SbYadDrNJAHWPWdF6%5EQyf8G21tCd1q9vIRRujLH1Tf9">
+                    </iframe>
+                </p>`);
+        });
+
+        $('#word-cloud').click(function () {
+            $('#table-td3-td1').html(`
+                <p align="middle">
+                    <iframe height="480" width="640" frameborder="0"
+                        src="http://view.takeview.co.kr/ko-KR/embed?s=%2FservicesNS%2Fnobody%2FTakeview_Service%2Fsaved%2Fsearches%2Fwordcloudexample&oid=IBAfSffTxltEy_EqP_eoQ9ERASKHGD1Mt4V1U366SKNfUbzdnFofzk95k9U0WErxxsChyEErRoe7ZPLztP6JRZPYYnuEO7misckuP9xTaTzxhZcEtzckmacelzAMlcA0gLKhVdnrTfuXGJDjFdiOsyg">
+                    </iframe>
+                </p>`);
+        });
+    }
+
+    initFunction()
+
+</script>
+
+</body>
+
+</html>
