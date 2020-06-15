@@ -5,3 +5,4 @@ MNIST_data/
 bert/__pycache__/
 bert/.ipynb_checkpoints/
 bert/squad_base/
+STT/*.pdf
