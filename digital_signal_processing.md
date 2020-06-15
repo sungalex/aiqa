@@ -28,4 +28,7 @@
     ![Fourier_transform](./img/Fourier_transform.png)
 
   - 독립변수 t는 시간을 나타내고, 변환변수 ξ는 주파수를 나타낸다. ξ는 f로 표현하기도 한다.
+
   - 임의의 주파수 ξ에 대하여, X(ξ)는 x(t)와 $e^{−2πiξt}$ 의 내적을 의미한다. 내적의 의미 중 여기서 가장 두드러지게 볼 것은 “닮음”이다. 푸리에 변환 공식은 "임의의 주파수 ξ에 대하여, X(ξ)는 x(t)와 $e^{−2πiξt}$ 가 얼마나 닮았는지를 말해주려고 합니다." 라는 의미를 내포하고 있다.
+
+  - [what is the Fourier Transform? A visual introduction - youtube](https://www.youtube.com/watch?v=spUNpyF58BY&t=157s)
