@@ -23,33 +23,9 @@ KAIT AI BM전문가 과정 "Voice Magic" 팀의 프로젝트 코드 공유를 �
 - diarization_speaker_count : 화자 분할 시 화자 숫자
 - model : 텍스트 변환 모델(video, phone_call, command_and_search, default) 선택 ([참고자료 Link](https://cloud.google.com/speech-to-text/docs/transcription-model))
 
-## 음성 어조 분석(감성 분석) : Vokaturi API
-
-- Neutral, Happy, Sad, Angry, Fear 5가지 감정에 대한 확률 분석 결과 제공
-- 언어에 관계없이 음성의 어조로 분석 가능(한국어도 분석 가능) 하지만, 정확성에 대한 검토 필요함
-
-![마녀사냥_감성분석.png](./img/마녀사냥_감성분석.png)
-
-## NLP 분석 : TakeView
-
-- Cluster Keywords
-![cluster_keyword.png](./img/cluster_keyword_2.png)
-
-- Topic1
-![topic1.png](./img/topic1_2.png)
-
-- Topic2
-![topic2.png](./img/topic2_2.png)
-
-- Word Cloud
-![word_cloud.png](./img/word_cloud_2.png)
-
-- Sentiment
-![key_paragraph.png](./img/sentiment.png)
-
 ## 코드 파일에 대한 설명
 
-코드 파일을 실행하기 위해서는 Google Speech-to-Text API 개발환경설정이 필요 합니다. ("google cloud speech-to-text 개발환경 설정하기.pdf" 파일 참고)
+코드 파일을 실행하기 위해서는 Google Speech-to-Text API 개발환경설정이 필요 합니다. ([google cloud speech-to-text 개발환경 설정하기.pdf](https://drive.google.com/file/d/1IohYNCIXnQNZnGMJQks58hc3evzkMMld/view?usp=sharing) 참조)
 
 - [1.google_quickstart.ipynb](1.google_quickstart.ipynb), [1.google_quickstart.py](1.google_quickstart.py) : Google Cloud Speech-to-Text API Quick-Start example
 - [2.google_streaming.ipynb](2.google_streaming.ipynb), [2.google_streaming.py](2.google_streaming.py) : Google Cloud Speech-to-Text API Streaming example
@@ -67,8 +43,6 @@ KAIT AI BM전문가 과정 "Voice Magic" 팀의 프로젝트 코드 공유를 �
   (OutOfRange: 400 Exceeded maximum allowed stream duration of 305 seconds.)
 - [nlp_functions_test.ipynb](nlp_functions_test.ipynb) : Google STT로 변환한 Transcript에 자연어처리(NLP) 기법(TF-IDF)을 이용하여, 자연어 검색, WordCloud, K-Means Clustering을 구현한 샘플
 - [streaming_audio_with_pyaudio.ipynb](streaming_audio_with_pyaudio.ipynb), [streaming_audio_with_pyaudio.py](streaming_audio_with_pyaudio.py) : Audio Stream 처리를 위해 Python pyaudio, wave 모듈을 사용하는 샘플(오디오를 읽어서 Play 하는 가장 기본 코드)
-- [VokaturiAPI.ipynb](VokaturiAPI.ipynb) : 음성으로 부터 어조를 분석하여 감성분석 결과를 출력해주는 Vokaturi 라이브러리를 이용하는 샘플
-  - 참고 : [https://developers.vokaturi.com/getting-started/overview](https://developers.vokaturi.com/getting-started/overview)
 - [modules/google_stt.py](modules/google_stt.py) : Google Speech-to-Text API를 이용하기 위한 Functions (샘플 코드에 있는 기능들을 모듈로 만들었음)
 - [modules/info_retrieval.py](modules/info_retrieval.py) : 자연어 처리(특히, Information Retrival)에 사용되는 Functions (TF-IDF, Cosine Similarity, Euclidian Distance 등)
 - [modules/ngram.py](modules/ngram.py) : N-Gram 언어 모델 Functions(음절 N-Gram, 어절 N-Gram)
